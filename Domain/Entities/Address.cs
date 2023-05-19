@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
-    public class Address
+	public class Address
     {
         public int Id { get; set; }
         public string City { get; set; }    

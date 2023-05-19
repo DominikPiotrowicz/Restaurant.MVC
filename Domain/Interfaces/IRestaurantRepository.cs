@@ -10,5 +10,6 @@ namespace Domain.Interfaces
     public  interface IRestaurantRepository
     {
         Task Create(Restaurant restaurant);
+        Task<IEnumerable<Restaurant>> GetAll();
     }
 }

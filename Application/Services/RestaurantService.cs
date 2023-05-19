@@ -26,5 +26,13 @@ namespace Application.Services
 
             await _restaurantRepository.Create(restaurant);
         }
-    }
+
+		public async Task<IEnumerable<RestaurantDto.RestaurantDto>> GetAll()
+		{
+            var restaurats = await _restaurantRepository.GetAll();
+            var dtos = _mapper.Map<IEnumerable<RestaurantDto.RestaurantDto>>(restaurats);
+
+            return dtos;
+		}
+	}
 }

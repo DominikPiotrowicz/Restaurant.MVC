@@ -1,50 +1,57 @@
-﻿<h1> Create Restaurant</h1>
+﻿@using Application.RestaurantDto;
+
+@model RestaurantDto
+<h1> Create Restaurant</h1>
 <hr />
 
 <div class="row">
 	<div class="col-md-4">
 		<form action="/Restaurant/Create" method="post">
 			<div class="form-group mb-3">
-				<label class="control-label" for="Name">Name</label>
-				<input class="form-control" type="text" id="Name" name="Name">
+				<label class="control-label" asp-for="Name">Name</label>
+				<input class="form-control" type="text" asp-for="Name">
+				<span asp-validation-for="Name" class="text-danger"></span>
 			</div>
 
 			<div class="form-group mb-3">
-				<label class="control-label" for="Name">Description</label>
-				<input class="form-control" type="text" id="Description" name="Description">
+				<label class="control-label" asp-for="Description">Description</label>
+				<input class="form-control" type="text" asp-for="Description">
+				<span asp-validation-for="Description" class="text-danger"></span>
 			</div>
 
 			<div class="form-group mb-3">
-				<label class="control-label" for="Name">Category</label>
-				<input class="form-control" type="text" id="Category" name="Category">
+				<label class="control-label" asp-for="Name">Category</label>
+				<input class="form-control" type="text" asp-for="Category">
 			</div>
 			<div class="form-group mb-3">
-				<label class="control-label" for="HasDelivery">Has Delivery</label>
-				<input type="checkbox" id="HasDelivery" name="HasDelivery">
+				<label class="control-label" asp-for="HasDelivery">Has Delivery</label>
+				<input type="checkbox" asp-for="HasDelivery">
 			</div>
 			<div class="form-group mb-3">
-				<label class="control-label" for="ContactEmail">Contact Email</label>
-				<input class="form-control" type="text" id="ContactEmail" name="ContactEmail">
-			</div>
-
-			<div class="form-group mb-3">
-				<label class="control-label" for="ContactNumber">Contact Number</label>
-				<input class="form-control" type="text" id="ContactNumber" name="ContactNumber">
+				<label class="control-label" asp-for="ContactEmail">Contact Email</label>
+				<input class="form-control" type="text" asp-for="ContactEmail">
+				<span asp-validation-for="ContactEmail" class="text-danger"></span>
 			</div>
 
 			<div class="form-group mb-3">
-				<label class="control-label" for="City">City</label>
-				<input class="form-control" type="text" id="City" name="City">
+				<label class="control-label" asp-for="ContactNumber">Contact Number</label>
+				<input class="form-control" type="text" asp-for="ContactNumber">
+				<span asp-validation-for="ContactNumber" class="text-danger"></span>
 			</div>
 
 			<div class="form-group mb-3">
-				<label class="control-label" for="Street">Street</label>
-				<input class="form-control" type="text" id="Street" name="Street">
+				<label class="control-label" asp-for="City">City</label>
+				<input class="form-control" type="text" asp-for="City">
 			</div>
 
 			<div class="form-group mb-3">
-				<label class="control-label" for="PostalCode">Postal Code</label>
-				<input class="form-control" type="text" id="PostalCode" name="PostalCode">
+				<label class="control-label" asp-for="Street">Street</label>
+				<input class="form-control" type="text" asp-for="Street">
+			</div>
+
+			<div class="form-group mb-3">
+				<label class="control-label" asp-for="PostalCode">Postal Code</label>
+				<input class="form-control" type="text" asp-for="PostalCode">
 			</div>
 
 			<div class="form-group mb-3">
@@ -53,3 +60,9 @@
 		</form>
 	</div>
 </div>
+
+@section Scripts{
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

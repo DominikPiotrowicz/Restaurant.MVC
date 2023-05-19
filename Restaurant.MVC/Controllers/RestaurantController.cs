@@ -13,6 +13,12 @@ namespace Restaurant.MVC.Controllers
             _restaurantService = restaurantService;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var restaurants = await _restaurantService.GetAll();
+            return View(restaurants);
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -20,10 +26,13 @@ namespace Restaurant.MVC.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(RestaurantDto restaurant)
-        {
+        {   /*
+            if (!ModelState.IsValid)    //TODO: Refactor Validation Model State
+            {                   
+                return View(restaurant);
+            }*/
             await _restaurantService.Create(restaurant);
             return RedirectToAction(nameof(Create)); //TODO: Refactor
         }
-
     }
 }

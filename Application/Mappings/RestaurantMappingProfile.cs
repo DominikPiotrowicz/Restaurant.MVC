@@ -15,9 +15,14 @@ namespace Application.Mappings
                     Street = src.Street,
                     PostalCode = src.PostalCode
                 }));
-                
 
-            CreateMap<Dish, DishDto>();
+            CreateMap<Restaurant, RestaurantDto.RestaurantDto>()
+                .ForMember(dto => dto.City, opt => opt.MapFrom(src => src.Address.City))
+                .ForMember(dto => dto.Street, opt => opt.MapFrom(src => src.Address.Street))
+                .ForMember(dto => dto.PostalCode, opt => opt.MapFrom(src => src.Address.PostalCode));
+
+
+			CreateMap<Dish, DishDto>();
         }
     }
 }
