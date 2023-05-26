@@ -1,21 +1,23 @@
 ﻿using Application.RestaurantDto;
-using Application.Services;
+using Application.RestaurantDto.Commands.CreateRestaurant;
+using Application.RestaurantDto.Queries.GetAllRestaurants;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Restaurant.MVC.Controllers
 {
     public class RestaurantController : Controller
     {
-        private readonly IRestaurantService _restaurantService;
+        private readonly IMediator _mediator;
 
-        public RestaurantController(IRestaurantService restaurantService)
+        public RestaurantController(IMediator mediator)
         {
-            _restaurantService = restaurantService;
+            _mediator = mediator;
         }
 
         public async Task<IActionResult> Index()
         {
-            var restaurants = await _restaurantService.GetAll();
+            var restaurants = await _mediator.Send(new GetAllRestaurantsQuery());
             return View(restaurants);
         }
 
@@ -25,14 +27,14 @@ namespace Restaurant.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RestaurantDto restaurant)
+        public async Task<IActionResult> Create(CreateRestaurantCommand command)
         {   /*
             if (!ModelState.IsValid)    //TODO: Refactor Validation Model State
             {                   
                 return View(restaurant);
             }*/
-            await _restaurantService.Create(restaurant);
-            return RedirectToAction(nameof(Create)); //TODO: Refactor
+            await _mediator.Send(command);
+            return RedirectToAction(nameof(Create));
         }
     }
 }

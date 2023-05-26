@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.RestaurantDto
+namespace Application.RestaurantDto.Commands.CreateRestaurant
 {
-	public class RestaurantDtoValidator : AbstractValidator<RestaurantDto>
-	{
-        public RestaurantDtoValidator()
+    public class CreateRestaurantCommandValidator : AbstractValidator<CreateRestaurantCommand>
+    {
+        public CreateRestaurantCommandValidator()
         {
             RuleFor(c => c.Name)
                 .NotEmpty()
