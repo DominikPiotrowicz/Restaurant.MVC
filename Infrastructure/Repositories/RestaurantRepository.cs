@@ -14,13 +14,23 @@ namespace Infrastructure.Repositories
 			_dbContext = dbContext;
 		}
 
-		public async Task Create(Restaurant restaurant)
+		public Task Commit()
+			=> _dbContext.SaveChangesAsync();
+
+		public async Task Create(Domain.Entities.Restaurant restaurant)
 		{
 			_dbContext.Add(restaurant);
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<IEnumerable<Restaurant>> GetAll()
-			=> await _dbContext.Restaurants.Include(r => r.Address).ToListAsync();
-	}
+		public async Task<IEnumerable<Domain.Entities.Restaurant>> GetAll()
+			=> await _dbContext.Restaurants.ToListAsync();
+
+		public async Task<Restaurant?> GetByEncodedName(string encodedName)
+			=> await _dbContext.Restaurants.FirstAsync(c=> c.EncodedName == encodedName);
+			
+
+        public Task<Restaurant?> GetByName(string name)
+        => _dbContext.Restaurants.FirstOrDefaultAsync(cw => cw.Name.ToLower() == name.ToLower());
+    }
 }

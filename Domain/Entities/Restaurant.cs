@@ -11,10 +11,12 @@
         public string ContactEmail { get; set; }
         public string ContactNumber { get; set; }
 
+        public Address Address { get; set; } = default!;
+
         public string EncodedName { get; private set; } = default!;
 
         public int AddressId { get; set; }
-        public virtual Address Address { get; set; }
+        //public virtual Address Address { get; set; }
         public virtual List<Dish> Dishes { get; set; }
 
         public void EncodeName() => EncodedName = Name.ToLower().Replace(" ", "-").ToString();

@@ -6,6 +6,6 @@
         public string City { get; set; }    
         public string Street { get; set; }    
         public string PostalCode { get; set; }
-        public virtual Restaurant Restaurant { get; set; }
+        public List<Restaurant> Restaurant { get; set; }
     }
 }

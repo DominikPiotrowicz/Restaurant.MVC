@@ -1,15 +1,13 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public  interface IRestaurantRepository
+	public  interface IRestaurantRepository
     {
         Task Create(Restaurant restaurant);
+        Task<Restaurant> GetByName(string name);
         Task<IEnumerable<Restaurant>> GetAll();
+        Task<Restaurant> GetByEncodedName(string endodedName);
+        Task Commit();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.RestaurantDto;
+﻿using Application.RestaurantDto.Commands.EditRestaurant;
 using AutoMapper;
 using Domain.Entities;
 
@@ -17,12 +17,17 @@ namespace Application.Mappings
                 }));
 
             CreateMap<Restaurant, RestaurantDto.RestaurantDto>()
-                .ForMember(dto => dto.City, opt => opt.MapFrom(src => src.Address.City))
-                .ForMember(dto => dto.Street, opt => opt.MapFrom(src => src.Address.Street))
-                .ForMember(dto => dto.PostalCode, opt => opt.MapFrom(src => src.Address.PostalCode));
+             .ForMember(dto => dto.City, opt => opt.MapFrom(src => src.Address.City))
+             .ForMember(dto => dto.Street, opt => opt.MapFrom(src => src.Address.Street))
+             .ForMember(dto => dto.PostalCode, opt => opt.MapFrom(src => src.Address.PostalCode))
+             .ForMember(dto => dto.Dishes, opt => opt.MapFrom(src => src.Dishes));
 
 
-			CreateMap<Dish, DishDto>();
-        }
+            CreateMap<RestaurantDto.RestaurantDto, EditRestaurantCommand>();
+
+            CreateMap<Dish, RestaurantDto.DishDto>();
+            CreateMap<RestaurantDto.DishDto, Dish>();
+
+		}
     }
 }

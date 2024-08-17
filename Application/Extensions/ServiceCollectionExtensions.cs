@@ -1,5 +1,6 @@
 ﻿using Application.Mappings;
 using Application.RestaurantDto.Commands.CreateRestaurant;
+using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -15,7 +16,12 @@ namespace Application.Extensions
 
 			services.AddAutoMapper(typeof(RestaurantMappingProfile));
 
-			services.AddValidatorsFromAssemblyContaining<CreateRestaurantCommandValidator>()
+            services.AddScoped(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<RestaurantMappingProfile>();
+            }).CreateMapper());
+
+            services.AddValidatorsFromAssemblyContaining<CreateRestaurantCommandValidator>()
 				.AddFluentValidationAutoValidation()
 				.AddFluentValidationClientsideAdapters();
 		}

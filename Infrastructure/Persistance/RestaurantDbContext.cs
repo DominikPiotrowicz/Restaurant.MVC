@@ -16,6 +16,9 @@ namespace Infrastructure.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            
+
             modelBuilder.Entity<Restaurant>()
                 .Property(r => r.Name)
                 .IsRequired()
