@@ -5,7 +5,6 @@ using Application.RestaurantDto.Queries.GetRestaurantByEncodedName;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
 
 namespace Restaurant.MVC.Controllers
 {
@@ -31,7 +30,7 @@ namespace Restaurant.MVC.Controllers
             return View();
         }
 
-        [Route("Restaurant/{encodedName}/Detalis")]
+        [Route("Restaurant/{encodedName}/Details")]
         public async Task<IActionResult> Details(string encodedName)
         {
             var dto = await _mediator.Send(new GetRestaurantByEncodedNameQuery(encodedName));
@@ -70,7 +69,7 @@ namespace Restaurant.MVC.Controllers
                 return View(command);
             }
             await _mediator.Send(command);
-            return RedirectToAction(nameof(Create));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

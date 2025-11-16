@@ -24,10 +24,10 @@ namespace Infrastructure.Repositories
 		}
 
 		public async Task<IEnumerable<Domain.Entities.Restaurant>> GetAll()
-			=> await _dbContext.Restaurants.ToListAsync();
+			=> await _dbContext.Restaurants.Include(r => r.Address).Include(r => r.Dishes).ToListAsync();
 
 		public async Task<Restaurant?> GetByEncodedName(string encodedName)
-			=> await _dbContext.Restaurants.FirstAsync(c=> c.EncodedName == encodedName);
+			=> await _dbContext.Restaurants.Include(r => r.Address).Include(r => r.Dishes).FirstOrDefaultAsync(c=> c.EncodedName == encodedName);
 			
 
         public Task<Restaurant?> GetByName(string name)

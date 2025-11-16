@@ -16,11 +16,6 @@ namespace Application.Extensions
 
 			services.AddAutoMapper(typeof(RestaurantMappingProfile));
 
-            services.AddScoped(provider => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<RestaurantMappingProfile>();
-            }).CreateMapper());
-
             services.AddValidatorsFromAssemblyContaining<CreateRestaurantCommandValidator>()
 				.AddFluentValidationAutoValidation()
 				.AddFluentValidationClientsideAdapters();

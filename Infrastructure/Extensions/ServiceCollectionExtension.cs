@@ -13,7 +13,7 @@ namespace Infrastructure.Extensions
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer(
-            configuration.GetConnectionString("Restaruant")));
+            configuration.GetConnectionString("Restaurant")));
 
             services.AddScoped<RestaurantSeeder>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();

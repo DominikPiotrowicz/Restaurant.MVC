@@ -16,6 +16,11 @@ namespace Application.RestaurantDto.Commands.EditRestaurant
 		{
 			var restaurant = await _repository.GetByEncodedName(request.EncodedName!);
 
+			if (restaurant == null)
+			{
+				throw new InvalidOperationException($"Restaurant with encoded name '{request.EncodedName}' not found.");
+			}
+
 			restaurant.Name = request.Name;
 			restaurant.Description = request.Description;
 			restaurant.Category = request.Category;

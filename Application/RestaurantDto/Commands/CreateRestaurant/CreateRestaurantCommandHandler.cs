@@ -19,6 +19,7 @@ namespace Application.RestaurantDto.Commands.CreateRestaurant
         {
             var restaurant = _mapper.Map<Domain.Entities.Restaurant>(request);
             restaurant.EncodeName();
+            restaurant.CreatedAt = DateTime.UtcNow;
 
             await _restaurantRepository.Create(restaurant);
 
