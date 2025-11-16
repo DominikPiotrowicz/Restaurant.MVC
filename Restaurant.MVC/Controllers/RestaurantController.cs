@@ -2,6 +2,7 @@
 using Application.RestaurantDto.Commands.EditRestaurant;
 using Application.RestaurantDto.Queries.GetAllRestaurants;
 using Application.RestaurantDto.Queries.GetRestaurantByEncodedName;
+using Application.RestaurantDto.Queries.SearchRestaurants;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,22 @@ namespace Restaurant.MVC.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchPhrase, string? category, bool? hasDelivery)
         {
-            var restaurants = await _mediator.Send(new GetAllRestaurantsQuery());
+            var query = new SearchRestaurantsQuery
+            {
+                SearchPhrase = searchPhrase,
+                Category = category,
+                HasDelivery = hasDelivery
+            };
+
+            var restaurants = await _mediator.Send(query);
+
+            // Przekazanie parametrów do ViewBag dla formularza
+            ViewBag.SearchPhrase = searchPhrase;
+            ViewBag.Category = category;
+            ViewBag.HasDelivery = hasDelivery;
+
             return View(restaurants);
         }
 

@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using Domain.Enums;
+
+namespace Domain.Entities
 {
     public class Dish
     {
@@ -6,6 +8,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
+        public DishCategory Category { get; set; }
 
         public int RestaurantId { get; set; }
         public virtual Restaurant Restaurant { get; set; }

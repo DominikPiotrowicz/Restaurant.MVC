@@ -1,3 +1,4 @@
+@using Application.Extensions
 @model Application.RestaurantDto.RestaurantDto
 
 @{
@@ -73,6 +74,7 @@
                                 <thead>
                                     <tr>
                                         <th>Nazwa</th>
+                                        <th>Kategoria</th>
                                         <th>Opis</th>
                                         <th class="text-end">Cena</th>
                                         <th class="text-end">Akcje</th>
@@ -83,6 +85,7 @@
                                     {
                                         <tr>
                                             <td><strong>@dish.Name</strong></td>
+                                            <td><span class="badge bg-info">@dish.Category.ToPolishString()</span></td>
                                             <td>@dish.Description</td>
                                             <td class="text-end">@dish.Price.ToString("C", new System.Globalization.CultureInfo("pl-PL"))</td>
                                             <td class="text-end">

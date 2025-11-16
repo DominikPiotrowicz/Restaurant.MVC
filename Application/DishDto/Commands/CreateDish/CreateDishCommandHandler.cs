@@ -28,6 +28,7 @@ namespace Application.DishDto.Commands.CreateDish
 				Name = request.Name,
 				Description = request.Description,
 				Price = request.Price,
+				Category = request.Category,
 				RestaurantId = restaurant.Id
 			};
 

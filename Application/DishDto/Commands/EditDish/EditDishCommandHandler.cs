@@ -24,6 +24,7 @@ namespace Application.DishDto.Commands.EditDish
 			dish.Name = request.Name;
 			dish.Description = request.Description;
 			dish.Price = request.Price;
+			dish.Category = request.Category;
 
 			await _dishRepository.Commit();
 

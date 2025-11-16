@@ -26,6 +26,14 @@
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
 
+        <div class="mb-3">
+            <label asp-for="Category" class="form-label">Kategoria</label>
+            <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<Domain.Enums.DishCategory>()">
+                <option value="">-- Wybierz kategorię --</option>
+            </select>
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+
         <input type="hidden" asp-for="RestaurantEncodedName" />
 
         <div class="d-flex gap-2">
