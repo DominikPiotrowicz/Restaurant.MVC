@@ -1,4 +1,5 @@
-﻿using Application.RestaurantDto.Commands.EditRestaurant;
+﻿using Application.DishDto.Commands.EditDish;
+using Application.RestaurantDto.Commands.EditRestaurant;
 using AutoMapper;
 using Domain.Entities;
 
@@ -27,6 +28,8 @@ namespace Application.Mappings
 
             CreateMap<Dish, RestaurantDto.DishDto>();
             CreateMap<RestaurantDto.DishDto, Dish>();
+
+            CreateMap<RestaurantDto.DishDto, EditDishCommand>();
 
 		}
     }
