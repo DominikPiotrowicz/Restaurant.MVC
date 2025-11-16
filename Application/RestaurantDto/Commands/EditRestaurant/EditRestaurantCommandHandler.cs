@@ -21,6 +21,11 @@ namespace Application.RestaurantDto.Commands.EditRestaurant
 				throw new InvalidOperationException($"Restaurant with encoded name '{request.EncodedName}' not found.");
 			}
 
+			if (restaurant.OwnerId != request.CurrentUserId)
+			{
+				throw new UnauthorizedAccessException("Only the restaurant owner can edit this restaurant.");
+			}
+
 			restaurant.Name = request.Name;
 			restaurant.Description = request.Description;
 			restaurant.Category = request.Category;

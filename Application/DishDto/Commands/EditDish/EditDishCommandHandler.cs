@@ -21,6 +21,11 @@ namespace Application.DishDto.Commands.EditDish
 				throw new InvalidOperationException($"Dish with id '{request.Id}' not found.");
 			}
 
+			if (dish.Restaurant?.OwnerId != request.CurrentUserId)
+			{
+				throw new UnauthorizedAccessException("Only the restaurant owner can edit dishes.");
+			}
+
 			dish.Name = request.Name;
 			dish.Description = request.Description;
 			dish.Price = request.Price;

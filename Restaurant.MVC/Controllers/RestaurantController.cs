@@ -5,7 +5,9 @@ using Application.RestaurantDto.Queries.GetRestaurantByEncodedName;
 using Application.RestaurantDto.Queries.SearchRestaurants;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Restaurant.MVC.Controllers
 {
@@ -39,6 +41,7 @@ namespace Restaurant.MVC.Controllers
             return View(restaurants);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -52,6 +55,7 @@ namespace Restaurant.MVC.Controllers
             return View(dto);
         }
 
+        [Authorize]
         [Route("Restaurant/{encodedName}/Edit")]
         public async Task<IActionResult> Edit(string encodedName)
         {
@@ -62,6 +66,7 @@ namespace Restaurant.MVC.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Restaurant/{encodedName}/Edit")]
         public async Task<IActionResult> Edit(string encodedName, EditRestaurantCommand command)
@@ -70,11 +75,14 @@ namespace Restaurant.MVC.Controllers
             {
                 return View(command);
             }
+
+            command.CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _mediator.Send(command);
             return RedirectToAction(nameof(Index));
 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateRestaurantCommand command)
         {
@@ -82,6 +90,8 @@ namespace Restaurant.MVC.Controllers
             {
                 return View(command);
             }
+
+            command.OwnerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _mediator.Send(command);
             return RedirectToAction(nameof(Index));
         }

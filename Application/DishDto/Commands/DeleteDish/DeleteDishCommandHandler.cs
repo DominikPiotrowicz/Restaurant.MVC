@@ -21,6 +21,11 @@ namespace Application.DishDto.Commands.DeleteDish
 				throw new InvalidOperationException($"Dish with id '{request.Id}' not found.");
 			}
 
+			if (dish.Restaurant?.OwnerId != request.CurrentUserId)
+			{
+				throw new UnauthorizedAccessException("Only the restaurant owner can delete dishes.");
+			}
+
 			await _dishRepository.Delete(dish);
 
 			return Unit.Value;

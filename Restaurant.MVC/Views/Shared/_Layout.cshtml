@@ -1,4 +1,8 @@
-﻿@{
+@using Microsoft.AspNetCore.Identity
+@using Domain.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
     var action = ViewContext.RouteData.Values["Action"]!.ToString();
     var controller = ViewContext.RouteData.Values["Controller"]!.ToString();
 }
@@ -33,6 +37,28 @@
                          <li class="nav-item">
                             <a class="nav-link text-dark @(controller == "Restaurant" && action == "Index" ? "active" : "")" asp-area="" asp-controller="Restaurant" asp-action="Index">Restaurant</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-dark">Witaj, @User.Identity!.Name</span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Wyloguj</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark @(controller == "Account" && action == "Login" ? "active" : "")" asp-controller="Account" asp-action="Login">Zaloguj się</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark @(controller == "Account" && action == "Register" ? "active" : "")" asp-controller="Account" asp-action="Register">Zarejestruj się</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

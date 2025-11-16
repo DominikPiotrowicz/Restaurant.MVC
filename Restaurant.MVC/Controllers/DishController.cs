@@ -3,10 +3,13 @@ using Application.DishDto.Commands.DeleteDish;
 using Application.DishDto.Commands.EditDish;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Restaurant.MVC.Controllers
 {
+	[Authorize]
 	public class DishController : Controller
 	{
 		private readonly IMediator _mediator;
@@ -38,6 +41,7 @@ namespace Restaurant.MVC.Controllers
 			}
 
 			command.RestaurantEncodedName = restaurantEncodedName;
+			command.CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			await _mediator.Send(command);
 
 			return RedirectToAction("Details", "Restaurant", new { encodedName = restaurantEncodedName });
@@ -70,6 +74,7 @@ namespace Restaurant.MVC.Controllers
 
 			command.Id = dishId;
 			command.RestaurantEncodedName = restaurantEncodedName;
+			command.CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			await _mediator.Send(command);
 
 			return RedirectToAction("Details", "Restaurant", new { encodedName = restaurantEncodedName });
@@ -79,7 +84,8 @@ namespace Restaurant.MVC.Controllers
 		[Route("Restaurant/{restaurantEncodedName}/Dish/{dishId}/Delete")]
 		public async Task<IActionResult> Delete(string restaurantEncodedName, int dishId)
 		{
-			await _mediator.Send(new DeleteDishCommand(dishId, restaurantEncodedName));
+			var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			await _mediator.Send(new DeleteDishCommand(dishId, restaurantEncodedName, currentUserId));
 
 			return RedirectToAction("Details", "Restaurant", new { encodedName = restaurantEncodedName });
 		}

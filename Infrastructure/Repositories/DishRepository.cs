@@ -21,7 +21,9 @@ namespace Infrastructure.Repositories
 		}
 
 		public async Task<Dish?> GetById(int id)
-			=> await _dbContext.Dishes.FirstOrDefaultAsync(d => d.Id == id);
+			=> await _dbContext.Dishes
+				.Include(d => d.Restaurant)
+				.FirstOrDefaultAsync(d => d.Id == id);
 
 		public async Task Delete(Dish dish)
 		{

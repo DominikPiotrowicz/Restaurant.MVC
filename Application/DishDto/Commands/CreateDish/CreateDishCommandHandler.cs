@@ -23,6 +23,11 @@ namespace Application.DishDto.Commands.CreateDish
 				throw new InvalidOperationException($"Restaurant with encoded name '{request.RestaurantEncodedName}' not found.");
 			}
 
+			if (restaurant.OwnerId != request.CurrentUserId)
+			{
+				throw new UnauthorizedAccessException("Only the restaurant owner can add dishes.");
+			}
+
 			var dish = new Domain.Entities.Dish
 			{
 				Name = request.Name,

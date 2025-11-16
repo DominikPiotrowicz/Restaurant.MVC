@@ -1,13 +1,14 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistance
 {
-	public class RestaurantDbContext : DbContext
+	public class RestaurantDbContext : IdentityDbContext<ApplicationUser>
     {
         public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<Restaurant> Restaurants { get; set;}
@@ -16,8 +17,7 @@ namespace Infrastructure.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Restaurant>()
                 .Property(r => r.Name)

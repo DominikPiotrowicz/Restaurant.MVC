@@ -18,6 +18,10 @@
         public int AddressId { get; set; }
         public virtual List<Dish> Dishes { get; set; }
 
+        // Owner relationship
+        public string? OwnerId { get; set; }
+        public virtual ApplicationUser? Owner { get; set; }
+
         public void EncodeName() => EncodedName = Name.ToLower().Replace(" ", "-");
     }
 }
