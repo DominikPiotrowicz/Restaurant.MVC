@@ -1,27 +1,11 @@
 using Domain.Entities;
+using Domain.Interfaces;
 using Infrastructure.Persistance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services
 {
-	public interface ISecurityMonitoringService
-	{
-		Task LogLoginAttemptAsync(string email, bool isSuccessful, string? errorMessage = null);
-		Task<bool> IsAccountLockedAsync(string email);
-		Task<bool> IsSuspiciousActivityAsync(string userId);
-		Task<SecurityThreatLevel> AssessThreatLevelAsync(string ipAddress);
-	}
-
-	public enum SecurityThreatLevel
-	{
-		None,
-		Low,
-		Medium,
-		High,
-		Critical
-	}
-
 	public class SecurityMonitoringService : ISecurityMonitoringService
 	{
 		private readonly RestaurantDbContext _context;

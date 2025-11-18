@@ -2,6 +2,7 @@ using Application.AdminDto.Queries.GetAdminStatistics;
 using Application.AdminDto.Queries.GetAllUsers;
 using Application.RestaurantDto.Queries.GetAllRestaurants;
 using Domain.Entities;
+using Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,11 +15,16 @@ namespace Restaurant.MVC.Controllers
 	{
 		private readonly IMediator _mediator;
 		private readonly UserManager<ApplicationUser> _userManager;
+		private readonly IAuditLogService _auditLogService;
 
-		public AdminController(IMediator mediator, UserManager<ApplicationUser> userManager)
+		public AdminController(
+			IMediator mediator,
+			UserManager<ApplicationUser> userManager,
+			IAuditLogService auditLogService)
 		{
 			_mediator = mediator;
 			_userManager = userManager;
+			_auditLogService = auditLogService;
 		}
 
 		public async Task<IActionResult> Index()
@@ -53,11 +59,27 @@ namespace Restaurant.MVC.Controllers
 			if (isAdmin)
 			{
 				await _userManager.RemoveFromRoleAsync(user, "Administrator");
+				await _auditLogService.LogAsync(
+					"Admin.RemoveAdminRole",
+					"ApplicationUser",
+					user.Id,
+					new { Role = "Administrator", Email = user.Email },
+					null,
+					true);
+
 				TempData["Success"] = $"Usunięto rolę administratora dla użytkownika {user.Email}";
 			}
 			else
 			{
 				await _userManager.AddToRoleAsync(user, "Administrator");
+				await _auditLogService.LogAsync(
+					"Admin.AddAdminRole",
+					"ApplicationUser",
+					user.Id,
+					null,
+					new { Role = "Administrator", Email = user.Email },
+					true);
+
 				TempData["Success"] = $"Dodano rolę administratora dla użytkownika {user.Email}";
 			}
 
@@ -70,23 +92,59 @@ namespace Restaurant.MVC.Controllers
 			var user = await _userManager.FindByIdAsync(userId);
 			if (user == null)
 			{
+				await _auditLogService.LogAsync(
+					"Admin.DeleteUser",
+					"ApplicationUser",
+					userId,
+					null,
+					null,
+					false,
+					"User not found");
 				return NotFound();
 			}
 
 			// Nie pozwalaj na usunięcie samego siebie
 			if (user.Id == _userManager.GetUserId(User))
 			{
+				await _auditLogService.LogAsync(
+					"Admin.DeleteUser",
+					"ApplicationUser",
+					user.Id,
+					new { Email = user.Email },
+					null,
+					false,
+					"Cannot delete own account");
+
 				TempData["Error"] = "Nie możesz usunąć własnego konta administratora";
 				return RedirectToAction(nameof(Users));
 			}
 
+			var userEmail = user.Email;
 			var result = await _userManager.DeleteAsync(user);
+
 			if (result.Succeeded)
 			{
-				TempData["Success"] = $"Użytkownik {user.Email} został usunięty";
+				await _auditLogService.LogAsync(
+					"Admin.DeleteUser",
+					"ApplicationUser",
+					userId,
+					new { Email = userEmail },
+					null,
+					true);
+
+				TempData["Success"] = $"Użytkownik {userEmail} został usunięty";
 			}
 			else
 			{
+				await _auditLogService.LogAsync(
+					"Admin.DeleteUser",
+					"ApplicationUser",
+					userId,
+					new { Email = userEmail },
+					null,
+					false,
+					string.Join("; ", result.Errors.Select(e => e.Description)));
+
 				TempData["Error"] = "Błąd podczas usuwania użytkownika";
 			}
 

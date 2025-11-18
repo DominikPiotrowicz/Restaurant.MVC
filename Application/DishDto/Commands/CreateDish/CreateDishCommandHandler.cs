@@ -7,11 +7,16 @@ namespace Application.DishDto.Commands.CreateDish
 	{
 		private readonly IDishRepository _dishRepository;
 		private readonly IRestaurantRepository _restaurantRepository;
+		private readonly IAuditLogService _auditLogService;
 
-		public CreateDishCommandHandler(IDishRepository dishRepository, IRestaurantRepository restaurantRepository)
+		public CreateDishCommandHandler(
+			IDishRepository dishRepository,
+			IRestaurantRepository restaurantRepository,
+			IAuditLogService auditLogService)
 		{
 			_dishRepository = dishRepository;
 			_restaurantRepository = restaurantRepository;
+			_auditLogService = auditLogService;
 		}
 
 		public async Task<Unit> Handle(CreateDishCommand request, CancellationToken cancellationToken)
@@ -38,6 +43,14 @@ namespace Application.DishDto.Commands.CreateDish
 			};
 
 			await _dishRepository.Create(dish);
+
+			await _auditLogService.LogAsync(
+				"Dish.Create",
+				"Dish",
+				dish.Id.ToString(),
+				null,
+				new { Name = dish.Name, Category = dish.Category, Price = dish.Price, RestaurantId = restaurant.Id },
+				true);
 
 			return Unit.Value;
 		}

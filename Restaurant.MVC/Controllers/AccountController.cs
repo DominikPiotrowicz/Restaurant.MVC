@@ -1,5 +1,5 @@
 using Domain.Entities;
-using Infrastructure.Services;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -131,7 +131,20 @@ namespace Restaurant.MVC.Controllers
 		[Authorize]
 		public async Task<IActionResult> Logout()
 		{
+			var userEmail = User.Identity?.Name;
 			await _signInManager.SignOutAsync();
+
+			if (!string.IsNullOrEmpty(userEmail))
+			{
+				await _auditLogService.LogAsync(
+					"User.Logout",
+					"ApplicationUser",
+					userEmail,
+					null,
+					null,
+					true);
+			}
+
 			return RedirectToAction("Index", "Home");
 		}
 

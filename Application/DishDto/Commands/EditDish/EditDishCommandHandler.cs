@@ -6,10 +6,14 @@ namespace Application.DishDto.Commands.EditDish
 	public class EditDishCommandHandler : IRequestHandler<EditDishCommand>
 	{
 		private readonly IDishRepository _dishRepository;
+		private readonly IAuditLogService _auditLogService;
 
-		public EditDishCommandHandler(IDishRepository dishRepository)
+		public EditDishCommandHandler(
+			IDishRepository dishRepository,
+			IAuditLogService auditLogService)
 		{
 			_dishRepository = dishRepository;
+			_auditLogService = auditLogService;
 		}
 
 		public async Task<Unit> Handle(EditDishCommand request, CancellationToken cancellationToken)
@@ -26,12 +30,36 @@ namespace Application.DishDto.Commands.EditDish
 				throw new UnauthorizedAccessException("Only the restaurant owner can edit dishes.");
 			}
 
+			var oldValues = new
+			{
+				Name = dish.Name,
+				Description = dish.Description,
+				Price = dish.Price,
+				Category = dish.Category
+			};
+
 			dish.Name = request.Name;
 			dish.Description = request.Description;
 			dish.Price = request.Price;
 			dish.Category = request.Category;
 
 			await _dishRepository.Commit();
+
+			var newValues = new
+			{
+				Name = dish.Name,
+				Description = dish.Description,
+				Price = dish.Price,
+				Category = dish.Category
+			};
+
+			await _auditLogService.LogAsync(
+				"Dish.Edit",
+				"Dish",
+				dish.Id.ToString(),
+				oldValues,
+				newValues,
+				true);
 
 			return Unit.Value;
 		}
