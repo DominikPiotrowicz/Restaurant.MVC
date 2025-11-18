@@ -14,6 +14,7 @@ namespace Infrastructure.Persistance
         public DbSet<Restaurant> Restaurants { get; set;}
         public DbSet<Address> Addresses { get; set;}
         public DbSet<Dish> Dishes { get; set;}
+        public DbSet<AuditLog> AuditLogs { get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

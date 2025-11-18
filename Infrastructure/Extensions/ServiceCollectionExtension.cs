@@ -3,6 +3,7 @@ using Domain.Interfaces;
 using Infrastructure.Persistance;
 using Infrastructure.Repositories;
 using Infrastructure.Seeders;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +46,10 @@ namespace Infrastructure.Extensions
             services.AddScoped<RoleSeeder>();
             services.AddScoped<IRestaurantRepository, RestaurantRepository>();
             services.AddScoped<IDishRepository, DishRepository>();
+
+            // Security and Logging Services
+            services.AddScoped<IAuditLogService, AuditLogService>();
+            services.AddScoped<ISecurityMonitoringService, SecurityMonitoringService>();
         }
     }
 }
