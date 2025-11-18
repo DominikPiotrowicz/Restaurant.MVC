@@ -14,7 +14,9 @@ var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
+var roleSeeder = scope.ServiceProvider.GetRequiredService<RoleSeeder>();
 
+await roleSeeder.Seed();
 await seeder.Seed();
 
 if (!app.Environment.IsDevelopment())

@@ -1,0 +1,121 @@
+@model Application.AdminDto.AdminStatisticsDto
+
+@{
+    ViewData["Title"] = "Panel Administratora";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4">
+                <i class="bi bi-speedometer2"></i> Panel Administratora
+            </h1>
+            <p class="lead">Witaj w panelu zarządzania systemem Restaurant.MVC</p>
+        </div>
+    </div>
+
+    <!-- Statystyki w kartach -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <i class="bi bi-shop fs-1 text-primary"></i>
+                    <h3 class="card-title mt-3">@Model.TotalRestaurants</h3>
+                    <p class="card-text text-muted">Wszystkie restauracje</p>
+                    <a asp-action="Restaurants" class="btn btn-outline-primary btn-sm">Zobacz szczegóły</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <i class="bi bi-people fs-1 text-success"></i>
+                    <h3 class="card-title mt-3">@Model.TotalUsers</h3>
+                    <p class="card-text text-muted">Zarejestrowani użytkownicy</p>
+                    <a asp-action="Users" class="btn btn-outline-success btn-sm">Zarządzaj użytkownikami</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <i class="bi bi-egg-fried fs-1 text-warning"></i>
+                    <h3 class="card-title mt-3">@Model.TotalDishes</h3>
+                    <p class="card-text text-muted">Wszystkie dania</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dodatkowe statystyki -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-truck"></i> Restauracje z dostawą</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fs-2 fw-bold">@Model.RestaurantsWithDelivery</span>
+                        <span class="text-muted">z @Model.TotalRestaurants restauracji</span>
+                    </div>
+                    @{
+                        var deliveryPercentage = Model.TotalRestaurants > 0
+                            ? (Model.RestaurantsWithDelivery * 100.0 / Model.TotalRestaurants)
+                            : 0;
+                    }
+                    <div class="progress mt-2" style="height: 10px;">
+                        <div class="progress-bar bg-info" role="progressbar"
+                             style="width: @deliveryPercentage.ToString("F1")%"
+                             aria-valuenow="@deliveryPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">@deliveryPercentage.ToString("F1")% oferuje dostawę</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-calendar-plus"></i> Nowe restauracje w tym miesiącu</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fs-2 fw-bold">@Model.RestaurantsCreatedThisMonth</span>
+                        <span class="text-muted">@DateTime.Now.ToString("MMMM yyyy")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Szybkie akcje -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-lightning"></i> Szybkie akcje</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2 d-md-flex">
+                        <a asp-action="Users" class="btn btn-primary">
+                            <i class="bi bi-people"></i> Zarządzaj użytkownikami
+                        </a>
+                        <a asp-action="Restaurants" class="btn btn-primary">
+                            <i class="bi bi-shop"></i> Zarządzaj restauracjami
+                        </a>
+                        <a asp-controller="Restaurant" asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-house-door"></i> Wróć do strony głównej
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}

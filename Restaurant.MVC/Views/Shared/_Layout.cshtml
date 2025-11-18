@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Restaurant.MVC.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/toastr.js/toastr.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -37,6 +38,14 @@
                          <li class="nav-item">
                             <a class="nav-link text-dark @(controller == "Restaurant" && action == "Index" ? "active" : "")" asp-area="" asp-controller="Restaurant" asp-action="Index">Restaurant</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark @(controller == "Admin" ? "active" : "")" asp-controller="Admin" asp-action="Index">
+                                    <i class="bi bi-speedometer2"></i> Panel Admina
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         @if (SignInManager.IsSignedIn(User))
